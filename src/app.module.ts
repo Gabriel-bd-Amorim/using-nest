@@ -1,26 +1,30 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { PrismaService } from './database/prisma.service';
-import { MembersRepository } from './repository/members-repository';
-import { PrismaRepositoryMembers } from './repository/prisma/prisma-repository-members';
 import { ConfigModule } from '@nestjs/config';
+import { PrismaModule } from './prisma/prisma.module';
+import { AppService } from './app.service';
+import { MemberModule } from './user/member.module';
 
-@Module({
-  imports: [
+const  dotenv =  
     ConfigModule.forRoot({
       isGlobal: true
     })
+    
 
-  ],
-  controllers: [AppController],
-  providers: [PrismaService,
-    {
-      provide: MembersRepository,
-      useClass: PrismaRepositoryMembers,
-      // ISSO aqui é inenção de dependencia
-    }
 
+@Module({ 
+  imports: [
+    dotenv,
+    PrismaModule,
+    MemberModule
   ],
+  providers: [
+    AppService
+  ],
+  controllers: [
+    AppController,
+  ]
 })
+
 
 export class AppModule {}
